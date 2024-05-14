@@ -1,1 +1,1 @@
-# Distributed-Systems-Mini Project
+# Problem-Solving-Platform
