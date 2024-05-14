@@ -1,1 +1,1 @@
-# Distributed-Systems-Project
+# Distributed-Systems-Mini Project
