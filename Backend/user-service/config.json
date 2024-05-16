@@ -1,0 +1,15 @@
+{
+    "database": {
+      "host": "localhost",
+      "port": 5432,
+      "user": "postgres",
+      "password": "postgres",
+      "dbname": "codepractice",
+      "sslmode": "disable"
+    },
+    "server": {
+      "address": "localhost",
+      "port": 8080
+    }
+  }
+  
