@@ -27,8 +27,8 @@ type Config struct {
 	} `json:"server"`
 }
 
-type user struct {
-	ID       string `json:"id"`
+type User struct {
+	ID       int    `json:"id"`
 	Username string `json:"username"`
 	Fullname string `json:"fullname"`
 }
@@ -80,9 +80,9 @@ func getUsers(c *gin.Context) {
 	}
 	defer rows.Close()
 
-	var users []user
+	var users []User
 	for rows.Next() {
-		var a user
+		var a User
 		err := rows.Scan(&a.ID, &a.Username, &a.Fullname)
 		if err != nil {
 			log.Fatal(err)
@@ -107,7 +107,7 @@ func getUserById(c *gin.Context) {
 	}
 	defer rows.Close()
 
-	var user user
+	var user User
 	if rows.Next() {
 		err := rows.Scan(&user.ID, &user.Username, &user.Fullname)
 		if err != nil {
@@ -123,7 +123,7 @@ func getUserById(c *gin.Context) {
 
 func createUser(c *gin.Context) {
 
-	var userAlbum user
+	var userAlbum User
 	if err := c.BindJSON(&userAlbum); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid request payload"})
 		return

@@ -1,12 +1,14 @@
--- Active: 1711291506680@@127.0.0.1@5432@codepractice
 
-CREATE DATABASE codepractice;
+
+CREATE DATABASE userdb;
 
 CREATE TABLE userdata (
 	id SERIAL PRIMARY KEY,
 	username VARCHAR(191) NOT NULL,
 	fullname VARCHAR(191) NOT NULL
 );
+
+CREATE DATABASE challengedb;
 
 CREATE TABLE challenge (
 	id SERIAL PRIMARY KEY,
@@ -15,9 +17,7 @@ CREATE TABLE challenge (
 	readmeFile BYTEA NOT NULL,
 	difficulty VARCHAR(191) NOT NULL,
 	testCasesFile BYTEA NOT NULL,
-	authorId VARCHAR(191) NOT NULL,
-	CONSTRAINT FK_CHALLENGE_USER FOREIGN KEY(authorId) REFERENCES User(id),
-	PRIMARY KEY(id)
+	authorId SERIAL NOT NULL
 );
 
 CREATE TABLE submittedfile (
