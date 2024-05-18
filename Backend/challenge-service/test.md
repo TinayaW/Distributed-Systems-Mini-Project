@@ -10,16 +10,14 @@
 
 curl -X POST \
   http://localhost:8080/challenge/createchallenge \
-  -H 'Content-Type: application/json' \
-  -d '{
-    "id": 1,
-    "title": "Example Challenge",
-    "templatefile": "example_template_content",
-    "readmefile": "example_readme_content",
-    "difficulty": "medium",
-    "testcasesfile": "example_test_cases_content",
-    "authorid": 123
-  }'
+  -H "Content-Type: multipart/form-data" \
+  -F "testcase=@/home/manuja/DisProject/ProblemSolvingPlatform/Backend/challenge-service/testfiles/testcase.zip" \
+  -F "template=@/home/manuja/DisProject/ProblemSolvingPlatform/Backend/challenge-service/testfiles/template.zip" \
+  -F "readme=@/home/manuja/DisProject/ProblemSolvingPlatform/Backend/challenge-service/testfiles/readme.md" \
+  -F "id=2" \
+  -F "title=Example Challenge 2" \
+  -F "difficulty=easy" \
+  -F "authorid=1234" 
 
 ## Get Challenges
 

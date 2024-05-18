@@ -3,6 +3,8 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -37,6 +39,13 @@ type Challenge struct {
 	AuthorID      int    `json:"authorid"`
 }
 
+type ChallengeMin struct {
+	ID         int    `json:"id"`
+	Title      string `json:"title"`
+	Difficulty string `json:"difficulty"`
+	AuthorID   int    `json:"authorid"`
+}
+
 var db *sql.DB
 
 func main() {
@@ -67,6 +76,7 @@ func main() {
 	}
 
 	router := gin.Default()
+	router.MaxMultipartMemory = 8 << 20
 	router.GET("/challenge/getchallenges", getChallenges)
 	router.GET("/challenge/getchallengebyid/:id", getChallengeById)
 	router.POST("/challenge/createchallenge", createChallenge)
@@ -78,16 +88,16 @@ func main() {
 func getChallenges(c *gin.Context) {
 	c.Header("Content-Type", "application/json")
 
-	rows, err := db.Query("SELECT id, title, templatefile, readmefile, difficulty, testcasesfile, authorid FROM challenge")
+	rows, err := db.Query("SELECT id, title, difficulty, authorid FROM challenge")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer rows.Close()
 
-	var challenges []Challenge
+	var challenges []ChallengeMin
 	for rows.Next() {
-		var a Challenge
-		err := rows.Scan(&a.ID, &a.Title, &a.TemplateFile, &a.ReadmeFile, &a.Difficulty, &a.TestCasesFile, &a.AuthorID)
+		var a ChallengeMin
+		err := rows.Scan(&a.ID, &a.Title, &a.Difficulty, &a.AuthorID)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -105,7 +115,7 @@ func getChallengeById(c *gin.Context) {
 	c.Header("Content-Type", "application/json")
 	id := c.Param("id")
 
-	rows, err := db.Query("SELECT  id, title, templatefile, readmefile, difficulty, testcasesfile, authorid FROM challenge WHERE id = $1", id)
+	rows, err := db.Query("SELECT id, title, templatefile, readmefile, difficulty, testcasesfile, authorid FROM challenge WHERE id = $1", id)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -117,6 +127,11 @@ func getChallengeById(c *gin.Context) {
 		if err != nil {
 			log.Fatal(err)
 		}
+
+		err = saveFilesLocally(challenge)
+		if err != nil {
+			log.Fatal(err)
+		}
 	} else {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Challenge not found"})
 		return
@@ -125,24 +140,91 @@ func getChallengeById(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, challenge)
 }
 
-func createChallenge(c *gin.Context) {
+func saveFilesLocally(challenge Challenge) error {
+	err := os.WriteFile(fmt.Sprintf("template_%d.zip", challenge.ID), challenge.TemplateFile, 0644)
+	if err != nil {
+		return err
+	}
 
-	var challengeAlbum Challenge
-	log.Println(c.Request.Body)
-	if err := c.ShouldBindJSON(&challengeAlbum); err != nil {
+	err = os.WriteFile(fmt.Sprintf("readme_%d.md", challenge.ID), challenge.ReadmeFile, 0644)
+	if err != nil {
+		return err
+	}
+
+	err = os.WriteFile(fmt.Sprintf("testcases_%d.zip", challenge.ID), challenge.TestCasesFile, 0644)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func createChallenge(c *gin.Context) {
+	testcaseFile, err := c.FormFile("testcase")
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	stmt, err := db.Prepare("INSERT INTO challenge (id, title, templatefile, readmefile, difficulty, testcasesfile, authorid) VALUES ($1, $2, $3, $4, $5, $6, $7)")
+	templateFile, err := c.FormFile("template")
 	if err != nil {
-		log.Fatal(err)
-	}
-	defer stmt.Close()
-
-	if _, err := stmt.Exec(challengeAlbum.ID, challengeAlbum.Title, challengeAlbum.Difficulty, challengeAlbum.AuthorID); err != nil {
-		log.Fatal(err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 
-	c.JSON(http.StatusCreated, challengeAlbum)
+	readmeFile, err := c.FormFile("readme")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	testcase, err := testcaseFile.Open()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to open testcase file"})
+		return
+	}
+	defer testcase.Close()
+
+	testcaseBytes, err := io.ReadAll(testcase)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to read testcase file"})
+		return
+	}
+
+	template, err := templateFile.Open()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to open template file"})
+		return
+	}
+	defer template.Close()
+	templateBytes, err := io.ReadAll(template)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to read template file"})
+		return
+	}
+
+	readme, err := readmeFile.Open()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to open readme file"})
+		return
+	}
+	defer readme.Close()
+	readmeBytes, err := io.ReadAll(readme)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to read readme file"})
+		return
+	}
+
+	id := c.PostForm("id")
+	title := c.PostForm("title")
+	difficulty := c.PostForm("difficulty")
+	authorid := c.PostForm("authorid")
+
+	_, err = db.Exec("INSERT INTO challenge (id, title, templatefile, readmefile, difficulty, testcasesfile, authorid) VALUES ($1, $2, $3, $4, $5, $6, $7)", id, title, templateBytes, readmeBytes, difficulty, testcaseBytes, authorid)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Challenge created successfully"})
 }
