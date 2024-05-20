@@ -4,12 +4,12 @@
       "port": 5432,
       "user": "postgres",
       "password": "postgres",
-      "dbname": "challengedb",
+      "dbname": "submissiondb",
       "sslmode": "disable"
     },
     "server": {
       "address": "localhost",
-      "port": 8081
+      "port": 8082
     }
   }
   
