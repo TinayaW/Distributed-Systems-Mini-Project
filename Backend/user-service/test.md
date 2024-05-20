@@ -9,7 +9,7 @@
 ## Create User
 
 curl -X POST \
-  http://localhost:8080/user/createuser \
+  http://localhost:8080/user/create \
   -H 'Content-Type: application/json' \
   -d '{
     "id": 1,
@@ -19,8 +19,8 @@ curl -X POST \
 
 ## Get Users
 
-curl -X GET http://localhost:8080/user/getusers
+curl -X GET http://localhost:8080/user/users
 
 ## Get User By ID
 
-curl -X GET http://localhost:8080/user/getusers/1
+curl -X GET http://localhost:8080/user/1

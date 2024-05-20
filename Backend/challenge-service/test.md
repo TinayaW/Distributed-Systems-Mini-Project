@@ -9,7 +9,7 @@
 ## Create User
 
 curl -X POST \
-  http://localhost:8080/challenge/createchallenge \
+  http://localhost:8081/challenge/create \
   -H "Content-Type: multipart/form-data" \
   -F "testcase=@/home/manuja/DisProject/ProblemSolvingPlatform/Backend/challenge-service/testfiles/testcase.zip" \
   -F "template=@/home/manuja/DisProject/ProblemSolvingPlatform/Backend/challenge-service/testfiles/template.zip" \
@@ -21,8 +21,8 @@ curl -X POST \
 
 ## Get Challenges
 
-curl -X GET http://localhost:8080/challenge/getchallenges
+curl -X GET http://localhost:8081/challenge/challenges
 
 ## Get Challenge By ID
 
-curl -X GET http://localhost:8080/challenge/getchallengebyid/1
+curl -X GET http://localhost:8081/challenge/1

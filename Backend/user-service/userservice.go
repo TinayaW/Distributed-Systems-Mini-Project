@@ -63,9 +63,9 @@ func main() {
 	}
 
 	router := gin.Default()
-	router.GET("/user/getusers", getUsers)
-	router.GET("/user/getuserbyid/:id", getUserById)
-	router.POST("/user/createuser", createUser)
+	router.GET("/user/users", getUsers)
+	router.GET("/user/:id", getUserById)
+	router.POST("/user/create", createUser)
 
 	serverAddress := config.Server.Address + ":" + strconv.Itoa(config.Server.Port)
 	router.Run(serverAddress)

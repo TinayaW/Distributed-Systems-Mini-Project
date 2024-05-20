@@ -77,9 +77,9 @@ func main() {
 
 	router := gin.Default()
 	router.MaxMultipartMemory = 8 << 20
-	router.GET("/challenge/getchallenges", getChallenges)
-	router.GET("/challenge/getchallengebyid/:id", getChallengeById)
-	router.POST("/challenge/createchallenge", createChallenge)
+	router.GET("/challenge/challenges", getChallenges)
+	router.GET("/challenge/:id", getChallengeById)
+	router.POST("/challenge/create", createChallenge)
 
 	serverAddress := config.Server.Address + ":" + strconv.Itoa(config.Server.Port)
 	router.Run(serverAddress)
