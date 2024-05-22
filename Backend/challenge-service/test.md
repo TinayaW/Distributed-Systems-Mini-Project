@@ -30,3 +30,20 @@ curl -X GET http://localhost:8081/challenge/1
 ## Get Challenge By Difficulty
 
 curl -X GET http://localhost:8081/challenge/difficulty/easy
+
+## Update Challenge
+
+curl -X PUT http://localhost:8081/challenge/update/3 \
+  -H "Content-Type: multipart/form-data" \
+  -F "testcase=@/home/manuja/DisProject/ProblemSolvingPlatform/Backend/challenge-service/testfiles/testcase.zip" \
+  -F "template=@/home/manuja/DisProject/ProblemSolvingPlatform/Backend/challenge-service/testfiles/template.zip" \
+  -F "readme=@/home/manuja/DisProject/ProblemSolvingPlatform/Backend/challenge-service/testfiles/readme.md" \
+  -F "title=Changed Challenge Title" \
+  -F "difficulty=Medium" \
+  -F "authorid=1235"
+
+## Delete Challenge
+
+curl -X DELETE \
+  http://localhost:8081/challenge/delete/1
+
