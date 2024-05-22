@@ -6,7 +6,7 @@
 
 # Test
 
-## Create User
+## Create Challenge
 
 curl -X POST \
   http://localhost:8081/challenge/create \
@@ -26,3 +26,7 @@ curl -X GET http://localhost:8081/challenge/challenges
 ## Get Challenge By ID
 
 curl -X GET http://localhost:8081/challenge/1
+
+## Get Challenge By Difficulty
+
+curl -X GET http://localhost:8081/challenge/difficulty/easy

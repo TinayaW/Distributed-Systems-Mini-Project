@@ -79,6 +79,7 @@ func main() {
 	router.MaxMultipartMemory = 8 << 20
 	router.GET("/challenge/challenges", getChallenges)
 	router.GET("/challenge/:id", getChallengeById)
+	router.GET("/challenge/difficulty/:difficulty", getChallengesByDifficulty)
 	router.POST("/challenge/create", createChallenge)
 
 	serverAddress := config.Server.Address + ":" + strconv.Itoa(config.Server.Port)
@@ -89,6 +90,33 @@ func getChallenges(c *gin.Context) {
 	c.Header("Content-Type", "application/json")
 
 	rows, err := db.Query("SELECT id, title, difficulty, authorid FROM challenge")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	var challenges []ChallengeMin
+	for rows.Next() {
+		var a ChallengeMin
+		err := rows.Scan(&a.ID, &a.Title, &a.Difficulty, &a.AuthorID)
+		if err != nil {
+			log.Fatal(err)
+		}
+		challenges = append(challenges, a)
+	}
+	err = rows.Err()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	c.IndentedJSON(http.StatusOK, challenges)
+}
+
+func getChallengesByDifficulty(c *gin.Context) {
+	c.Header("Content-Type", "application/json")
+	difficulty := c.Param("difficulty")
+
+	rows, err := db.Query("SELECT id, title, difficulty, authorid FROM challenge WHERE difficulty = $1", difficulty)
 	if err != nil {
 		log.Fatal(err)
 	}

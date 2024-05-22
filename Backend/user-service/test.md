@@ -12,9 +12,9 @@ curl -X POST \
   http://localhost:8080/user/create \
   -H 'Content-Type: application/json' \
   -d '{
-    "id": 1,
+    "id": 2,
     "username": "MrManchi",
-    "fullname": "Manuja Dewmina"
+    "fullname": "Manuja"
   }'
 
 ## Get Users
@@ -24,3 +24,18 @@ curl -X GET http://localhost:8080/user/users
 ## Get User By ID
 
 curl -X GET http://localhost:8080/user/1
+
+## Update User
+
+curl -X PUT \
+  http://localhost:8080/user/update/3 \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "username": "MrD",
+    "fullname": "D Kariyawasam"
+}'
+
+## Delete User
+
+curl -X DELETE \
+  http://localhost:8080/user/delete/1
