@@ -12,12 +12,11 @@ curl -X POST \
   http://localhost:8082/submission/upload \
   -H "Content-Type: multipart/form-data" \
   -F "file=@/home/manuja/DisProject/ProblemSolvingPlatform/Backend/submission-service/testfiles/submission.zip" \
-  -F "id=4" \
+  -F "id=1" \
   -F "fileName=submission" \
   -F "fileExtension=zip" \
-  -F "score=2.09" \
-  -F "userId=1005" \
-  -F "challengeId=123" 
+  -F "userId=1006" \
+  -F "challengeId=1" 
 
 ## Get Submissions By UserID
 

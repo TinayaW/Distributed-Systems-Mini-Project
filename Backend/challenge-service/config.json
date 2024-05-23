@@ -1,6 +1,6 @@
 {
     "database": {
-      "host": "localhost",
+      "host": "host.docker.internal",
       "port": 5432,
       "user": "postgres",
       "password": "postgres",
@@ -8,7 +8,7 @@
       "sslmode": "disable"
     },
     "server": {
-      "address": "localhost",
+      "address": "",
       "port": 8081
     }
   }
