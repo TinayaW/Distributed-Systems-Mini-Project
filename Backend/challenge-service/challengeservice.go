@@ -3,7 +3,6 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -158,10 +157,10 @@ func getChallengeById(c *gin.Context) {
 			log.Fatal(err)
 		}
 
-		err = saveFilesLocally(challenge)
-		if err != nil {
-			log.Fatal(err)
-		}
+		// err = saveFilesLocally(challenge)
+		// if err != nil {
+		// 	log.Fatal(err)
+		// }
 	} else {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Challenge not found"})
 		return
@@ -170,24 +169,24 @@ func getChallengeById(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, challenge)
 }
 
-func saveFilesLocally(challenge Challenge) error {
-	err := os.WriteFile(fmt.Sprintf("template_%d.zip", challenge.ID), challenge.TemplateFile, 0644)
-	if err != nil {
-		return err
-	}
+// func saveFilesLocally(challenge Challenge) error {
+// 	err := os.WriteFile(fmt.Sprintf("template_%d.zip", challenge.ID), challenge.TemplateFile, 0644)
+// 	if err != nil {
+// 		return err
+// 	}
 
-	err = os.WriteFile(fmt.Sprintf("readme_%d.md", challenge.ID), challenge.ReadmeFile, 0644)
-	if err != nil {
-		return err
-	}
+// 	err = os.WriteFile(fmt.Sprintf("readme_%d.md", challenge.ID), challenge.ReadmeFile, 0644)
+// 	if err != nil {
+// 		return err
+// 	}
 
-	err = os.WriteFile(fmt.Sprintf("testcases_%d.zip", challenge.ID), challenge.TestCasesFile, 0644)
-	if err != nil {
-		return err
-	}
+// 	err = os.WriteFile(fmt.Sprintf("testcases_%d.zip", challenge.ID), challenge.TestCasesFile, 0644)
+// 	if err != nil {
+// 		return err
+// 	}
 
-	return nil
-}
+// 	return nil
+// }
 
 func createChallenge(c *gin.Context) {
 	testcaseFile, err := c.FormFile("testcase")

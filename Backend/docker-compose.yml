@@ -1,25 +1,32 @@
 version: '3.8'
 services:
-  app:
-    build: .
+  user-service:
+    build:
+      context: ./user-service
     ports:
       - "8080:8080"
-    depends_on:
-      - db
-    environment:
-      - DB_HOST=db
-      - DB_USER=postgres
-      - DB_PASS=postgres
-      - DB_NAME=mydb
-      - DB_PORT=5432
-  db:
-    image: postgres:13
-    environment:
-      POSTGRES_DB: mydb
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    volumes:
-      - pgdata:/var/lib/postgresql/data
+    networks:
+      - my-network
+    hostname: userservice
+    
+  challenge-service:
+    build:
+      context: ./challenge-service
+    ports:
+      - "8081:8081"
+    networks:
+      - my-network
+    hostname: challengeservice
 
-volumes:
-  pgdata:
+  submission-service:
+    build:
+      context: ./submission-service
+    ports:
+      - "8082:8082"
+    networks:
+      - my-network
+    hostname: submissionservice
+
+networks:
+  my-network:
+    driver: bridge

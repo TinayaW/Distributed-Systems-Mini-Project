@@ -3,12 +3,13 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
@@ -37,6 +38,16 @@ type Submission struct {
 	FileName      string  `json:"fileName"`
 	FileExtension string  `json:"fileExtension"`
 	File          []byte  `json:"file"`
+}
+
+type Challenge struct {
+	ID            int    `json:"id"`
+	Title         string `json:"title"`
+	TemplateFile  []byte `json:"templatefile"`
+	ReadmeFile    []byte `json:"readmefile"`
+	Difficulty    string `json:"difficulty"`
+	TestCasesFile []byte `json:"testfasesfile"`
+	AuthorID      int    `json:"authorid"`
 }
 
 var db *sql.DB
@@ -96,10 +107,10 @@ func getUserSubmissions(c *gin.Context) {
 			log.Fatal(err)
 		}
 
-		err = saveFilesLocally(a)
-		if err != nil {
-			log.Fatal(err)
-		}
+		// err = saveFilesLocally(a)
+		// if err != nil {
+		// 	log.Fatal(err)
+		// }
 		submissions = append(submissions, a)
 	}
 	err = rows.Err()
@@ -128,10 +139,10 @@ func getChallengeSubmissions(c *gin.Context) {
 			log.Fatal(err)
 		}
 
-		err = saveFilesLocally(a)
-		if err != nil {
-			log.Fatal(err)
-		}
+		// err = saveFilesLocally(a)
+		// if err != nil {
+		// 	log.Fatal(err)
+		// }
 		submissions = append(submissions, a)
 	}
 	err = rows.Err()
@@ -159,10 +170,10 @@ func getSubmissionById(c *gin.Context) {
 			log.Fatal(err)
 		}
 
-		err = saveFilesLocally(submission)
-		if err != nil {
-			log.Fatal(err)
-		}
+		// err = saveFilesLocally(submission)
+		// if err != nil {
+		// 	log.Fatal(err)
+		// }
 	} else {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "submission not found"})
 		return
@@ -171,16 +182,20 @@ func getSubmissionById(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, submission)
 }
 
-func saveFilesLocally(submission Submission) error {
-	err := os.WriteFile(fmt.Sprintf("submission%d.zip", submission.ID), submission.File, 0644)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
+// func saveFilesLocally(submission Submission) error {
+// 	err := os.WriteFile(fmt.Sprintf("submission%d.zip", submission.ID), submission.File, 0644)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	return nil
+// }
 
 func uploadSubmission(c *gin.Context) {
+
+	if _, err := os.Stat("temp"); os.IsNotExist(err) {
+		os.Mkdir("temp", 0755)
+	}
+
 	file, err := c.FormFile("file")
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -201,17 +216,93 @@ func uploadSubmission(c *gin.Context) {
 	}
 
 	id := c.PostForm("id")
-	score := c.PostForm("score")
 	userId := c.PostForm("userId")
 	challengeId := c.PostForm("challengeId")
 	fileName := c.PostForm("fileName")
 	fileExtension := c.PostForm("fileExtension")
 
-	_, err = db.Exec("INSERT INTO submission (id, score, userId, challengeId, fileName, fileExtension, file) VALUES ($1, $2, $3, $4, $5, $6, $7)", id, score, userId, challengeId, fileName, fileExtension, fileBytes)
+	challengeResp, err := http.Get("http://challengeservice:8081/challenge/" + challengeId)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch challenge: " + err.Error()})
+		return
+	}
+	defer challengeResp.Body.Close()
+
+	if challengeResp.StatusCode != http.StatusOK {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Challenge not found"})
+		return
+	}
+
+	var challenge Challenge
+	err = json.NewDecoder(challengeResp.Body).Decode(&challenge)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to decode challenge: " + err.Error()})
+		return
+	}
+
+	err = saveChallengeFilesLocally(challenge)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save challenge files: " + err.Error()})
+		return
+	}
+
+	_, err = exec.Command("/bin/bash", "-c", "unzip -o temp/testcases.zip -d temp").Output()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to unzip testcases: " + err.Error()})
+		return
+	}
+
+	err = saveSubmissionFilesLocally(Submission{File: fileBytes})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save submission files: " + err.Error()})
+		return
+	}
+
+	_, err = exec.Command("/bin/bash", "-c", "unzip -o temp/submission.zip -d temp").Output()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to unzip submission: " + err.Error()})
+		return
+	}
+
+	score, err := exec.Command("python3", "temp/testcase.py").Output()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to run testcases: " + err.Error()})
+		return
+	}
+
+	trimmedScore := strings.TrimSpace(string(score))
+	scoreFloat, err := strconv.ParseFloat(trimmedScore, 64)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to parse score: " + err.Error()})
+		return
+	}
+	_, err = db.Exec("INSERT INTO submission (id, score, userId, challengeId, fileName, fileExtension, file) VALUES ($1, $2, $3, $4, $5, $6, $7)", id, scoreFloat, userId, challengeId, fileName, fileExtension, fileBytes)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Challenge created successfully"})
+	// err = os.RemoveAll("temp")
+	// if err != nil {
+	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete temp folder: " + err.Error()})
+	// 	return
+	// }
+
+	c.JSON(http.StatusOK, gin.H{"message": "Submission created successfully"})
+}
+
+func saveChallengeFilesLocally(challenge Challenge) error {
+	err := os.WriteFile("temp/testcases.zip", challenge.TestCasesFile, 0644)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func saveSubmissionFilesLocally(submission Submission) error {
+	err := os.WriteFile("temp/submission.zip", submission.File, 0644)
+	if err != nil {
+		return err
+	}
+	return nil
 }
