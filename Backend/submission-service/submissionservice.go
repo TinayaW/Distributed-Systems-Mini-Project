@@ -28,6 +28,9 @@ type Config struct {
 		Address string `json:"address"`
 		Port    int    `json:"port"`
 	} `json:"server"`
+	Services struct {
+		ApiGateway string `json:"apigateway"`
+	} `json:"services"`
 }
 
 type Submission struct {
@@ -83,7 +86,9 @@ func main() {
 	router.GET("/submission/user/:userid", getUserSubmissions)
 	router.GET("/submission/challenge/:challengeid", getChallengeSubmissions)
 	router.GET("/submission/:id", getSubmissionById)
-	router.POST("/submission/upload", uploadSubmission)
+	router.POST("/submission/upload", func(c *gin.Context) {
+		uploadSubmission(c, &config)
+	})
 
 	serverAddress := config.Server.Address + ":" + strconv.Itoa(config.Server.Port)
 	router.Run(serverAddress)
@@ -190,7 +195,7 @@ func getSubmissionById(c *gin.Context) {
 // 	return nil
 // }
 
-func uploadSubmission(c *gin.Context) {
+func uploadSubmission(c *gin.Context, config *Config) {
 
 	if _, err := os.Stat("temp"); os.IsNotExist(err) {
 		os.Mkdir("temp", 0755)
@@ -221,7 +226,7 @@ func uploadSubmission(c *gin.Context) {
 	fileName := c.PostForm("fileName")
 	fileExtension := c.PostForm("fileExtension")
 
-	challengeResp, err := http.Get("http://challengeservice:8081/challenge/" + challengeId)
+	challengeResp, err := http.Get(config.Services.ApiGateway + "/challenge/" + challengeId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch challenge: " + err.Error()})
 		return
@@ -282,11 +287,11 @@ func uploadSubmission(c *gin.Context) {
 		return
 	}
 
-	// err = os.RemoveAll("temp")
-	// if err != nil {
-	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete temp folder: " + err.Error()})
-	// 	return
-	// }
+	err = os.RemoveAll("temp")
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete temp folder: " + err.Error()})
+		return
+	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Submission created successfully"})
 }
