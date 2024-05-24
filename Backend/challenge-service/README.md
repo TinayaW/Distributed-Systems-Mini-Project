@@ -1,12 +1,19 @@
+*If not use docker compose use below methods.*
+
 # Run
 
 1. `go mod init backend/challenge-service`
 2. `go get .`
 3. `go run .`
 
+# Docker run
+
+1. `docker build --tag challenge-service .`
+2. `docker run --publish 8081:8081 challenge-service`
+
 # Test
 
-## Create Challenge
+### 1. Create Challenge
 
 curl -X POST \
   http://localhost:8081/challenge/create \
@@ -19,19 +26,19 @@ curl -X POST \
   -F "difficulty=easy" \
   -F "authorid=1234" 
 
-## Get Challenges
+### 2. Get Challenges
 
 curl -X GET http://localhost:8081/challenge/challenges
 
-## Get Challenge By ID
+### 3. Get Challenge By ID
 
 curl -X GET http://localhost:8081/challenge/1
 
-## Get Challenge By Difficulty
+### 4. Get Challenge By Difficulty
 
 curl -X GET http://localhost:8081/challenge/difficulty/easy
 
-## Update Challenge
+### 5. Update Challenge
 
 curl -X PUT http://localhost:8081/challenge/update/3 \
   -H "Content-Type: multipart/form-data" \
@@ -42,7 +49,7 @@ curl -X PUT http://localhost:8081/challenge/update/3 \
   -F "difficulty=Medium" \
   -F "authorid=1235"
 
-## Delete Challenge
+### 6. Delete Challenge
 
 curl -X DELETE \
   http://localhost:8081/challenge/delete/1

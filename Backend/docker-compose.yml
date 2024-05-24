@@ -3,8 +3,6 @@ services:
   user-service:
     build:
       context: ./user-service
-    ports:
-      - "8080:8080"
     networks:
       - my-network
     hostname: userservice
@@ -12,8 +10,6 @@ services:
   challenge-service:
     build:
       context: ./challenge-service
-    ports:
-      - "8081:8081"
     networks:
       - my-network
     hostname: challengeservice
@@ -21,11 +17,24 @@ services:
   submission-service:
     build:
       context: ./submission-service
-    ports:
-      - "8082:8082"
     networks:
       - my-network
     hostname: submissionservice
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+    ports:
+      - "8083:8083"
+    networks:
+      my-network:
+        aliases:
+          - gateway
+    hostname: apigateway
+    depends_on:
+      - user-service
+      - challenge-service
+      - submission-service
 
 networks:
   my-network:
