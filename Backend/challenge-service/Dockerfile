@@ -7,8 +7,9 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o challenge-service .
+RUN go build -o challenge-service ./cmd/challenge-service/
 
 EXPOSE 8081
 
 CMD ["./challenge-service"]
+ 

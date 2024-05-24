@@ -7,8 +7,13 @@
       "dbname": "challengedb",
       "sslmode": "disable"
     },
-    "server": {
-      "address": "challengeservice",
+    "consul": {
+      "address": "consul",
+      "port": 8500
+    },
+    "endpoint": {
+      "name": "challengeservice",
+      "address": "",
       "port": 8081
     }
   }
