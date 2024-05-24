@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	configdata, err := config.LoadConfig("../../config/config.json")
+	configdata, err := config.LoadConfig("config/config.json")
 	if err != nil {
 		log.Fatal("Failed to load config:", err)
 		return

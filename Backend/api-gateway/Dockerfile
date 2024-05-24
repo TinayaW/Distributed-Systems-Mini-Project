@@ -7,7 +7,7 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o api-gateway .
+RUN go build -o api-gateway ./cmd/api-gateway/
 
 EXPOSE 8083
 
