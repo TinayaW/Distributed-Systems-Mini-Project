@@ -3,12 +3,15 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/hashicorp/consul/api"
 	_ "github.com/lib/pq"
 )
 
@@ -62,6 +65,27 @@ func main() {
 		log.Fatal(err)
 	}
 
+	consulConfig := api.DefaultConfig()
+	consulConfig.Address = "consul:8500"
+	consulClient, err := api.NewClient(consulConfig)
+	if err != nil {
+		fmt.Println("Failed to create Consul client:", err)
+		return
+	}
+
+	err = registerService(consulClient, config.Server.Address, config.Server.Port, "/health")
+	if err != nil {
+		fmt.Println("Failed to register service :", err)
+		return
+	}
+
+	defer func() {
+		err := deregisterService(consulClient, config.Server.Address)
+		if err != nil {
+			fmt.Println("Failed to deregister service :", err)
+		}
+	}()
+
 	router := gin.Default()
 	router.GET("/user/users", getUsers)
 	router.GET("/user/:id", getUserById)
@@ -69,8 +93,84 @@ func main() {
 	router.PUT("/user/update/:id", updateUser)
 	router.DELETE("/user/delete/:id", deleteUser)
 
-	serverAddress := config.Server.Address + ":" + strconv.Itoa(config.Server.Port)
+	router.GET("/health", func(c *gin.Context) {
+		c.String(http.StatusOK, "OK")
+	})
+
+	// serverAddress := config.Server.Address + ":" + strconv.Itoa(config.Server.Port)
+	serverAddress := ":" + strconv.Itoa(config.Server.Port)
 	router.Run(serverAddress)
+
+	ticker := time.NewTicker(300 * time.Second)
+	defer ticker.Stop()
+	for {
+		select {
+		case <-ticker.C:
+			ok, err := checkHealth(consulClient, config.Server.Address)
+			if err != nil {
+				fmt.Println("Failed to check health:", err)
+				continue
+			}
+			if !ok {
+				err := deregisterService(consulClient, config.Server.Address)
+				if err != nil {
+					fmt.Println("Failed to deregister service :", err)
+					continue
+				}
+				err = registerService(consulClient, config.Server.Address, config.Server.Port, "/health")
+				if err != nil {
+					fmt.Println("Failed to register service :", err)
+				}
+			}
+		}
+	}
+}
+
+func registerService(client *api.Client, serviceName string, servicePort int, healthCheckPath string) error {
+	registration := &api.AgentServiceRegistration{
+		Name:    serviceName,
+		Address: serviceName,
+		Port:    servicePort,
+		Check: &api.AgentServiceCheck{
+			HTTP:                           fmt.Sprintf("http://%s:%d%s", serviceName, servicePort, healthCheckPath),
+			Interval:                       "1m",
+			Timeout:                        "10s",
+			DeregisterCriticalServiceAfter: "3m",
+		},
+	}
+
+	err := client.Agent().ServiceRegister(registration)
+	if err != nil {
+		return fmt.Errorf("Failed to register %s service: %v", serviceName, err)
+	}
+
+	fmt.Printf("Registered %s service\n", serviceName)
+	return nil
+}
+
+func deregisterService(client *api.Client, serviceName string) error {
+	err := client.Agent().ServiceDeregister(serviceName)
+	if err != nil {
+		return fmt.Errorf("Failed to deregister %s service: %v", serviceName, err)
+	}
+
+	fmt.Printf("Deregistered %s service\n", serviceName)
+	return nil
+}
+
+func checkHealth(client *api.Client, serviceName string) (bool, error) {
+	healthChecks, _, err := client.Health().Checks(serviceName, nil)
+	if err != nil {
+		return false, fmt.Errorf("Failed to query health checks: %v", err)
+	}
+
+	for _, check := range healthChecks {
+		if check.Status != api.HealthPassing {
+			return false, nil
+		}
+	}
+
+	return true, nil
 }
 
 func getUsers(c *gin.Context) {

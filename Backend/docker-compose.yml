@@ -1,8 +1,18 @@
 version: '3.8'
 services:
+  consul:
+    image: consul:1.15.4
+    ports:
+      - "8500:8500" 
+    networks:
+      - my-network
+    hostname: consul
+
   user-service:
     build:
       context: ./user-service
+    depends_on:
+      - consul
     networks:
       - my-network
     hostname: userservice
@@ -10,6 +20,8 @@ services:
   challenge-service:
     build:
       context: ./challenge-service
+    depends_on:
+      - consul
     networks:
       - my-network
     hostname: challengeservice
@@ -17,6 +29,8 @@ services:
   submission-service:
     build:
       context: ./submission-service
+    depends_on:
+      - consul
     networks:
       - my-network
     hostname: submissionservice
@@ -32,6 +46,7 @@ services:
           - gateway
     hostname: apigateway
     depends_on:
+      - consul
       - user-service
       - challenge-service
       - submission-service

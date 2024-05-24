@@ -8,7 +8,7 @@
       "sslmode": "disable"
     },
     "server": {
-      "address": "",
+      "address": "userservice",
       "port": 8080
     }
   }

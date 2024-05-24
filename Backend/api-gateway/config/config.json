@@ -1,0 +1,11 @@
+{
+    "consul": {
+        "address": "consul",
+        "port": 8500
+    },
+    "endpoint": {
+        "address": "",
+        "port": 8083
+    }
+  }
+  
