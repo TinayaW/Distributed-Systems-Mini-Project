@@ -7,7 +7,7 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o user-service .
+RUN go build -o user-service ./cmd/user-service/ 
 
 EXPOSE 8080
 

@@ -7,9 +7,14 @@
       "dbname": "userdb",
       "sslmode": "disable"
     },
-    "server": {
-      "address": "userservice",
+    "consul": {
+      "address": "consul",
+      "port": 8500
+    },
+    "endpoint": {
+      "name": "userservice",
+      "address": "",
       "port": 8080
     }
   }
-  
+   
