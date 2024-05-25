@@ -9,7 +9,7 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o submission-service .
+RUN go build -o submission-service ./cmd/submission-service/
 
 EXPOSE 8082
 

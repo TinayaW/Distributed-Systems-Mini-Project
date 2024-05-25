@@ -7,8 +7,13 @@
       "dbname": "submissiondb",
       "sslmode": "disable"
     },
-    "server": {
-      "address": "submissionservice",
+    "consul": {
+      "address": "consul",
+      "port": 8500
+    },
+    "endpoint": {
+      "name": "submissionservice",
+      "address": "",
       "port": 8082
     },
     "services": {

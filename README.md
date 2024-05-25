@@ -3,6 +3,5 @@
 ## Architecture Diagram
 
 <div align='center'>
-    <img src="https://github.com/TinayaW/Distributed-Systems-Mini-Project/assets/90247671/5958a077-178b-4839-bcf1-6d4b3f43aeb0" width="700" align="center">
+    <img src="https://github.com/ManujaDewmina/Problem-Solving-Platform/assets/92631934/a454961b-6801-4762-b9b5-71da617534f6" width="700" align="center">
 </div>
-
