@@ -372,6 +372,28 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get Challenges By userid",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/challenge/challenges/user/1001",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"challenge",
+								"challenges",
+								"user",
+								"1001"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},

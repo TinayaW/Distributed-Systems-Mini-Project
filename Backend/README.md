@@ -90,15 +90,15 @@ curl -X GET http://localhost:8083/challenge/challenges
 
 curl -X GET http://localhost:8083/challenge/challenges/user/782077
 
-### 2.3. Get challenge by ID
+### 2.4. Get challenge by ID
 
 curl -X GET http://localhost:8083/challenge/1
 
-### 2.4. Get challenge by difficulty
+### 2.5. Get challenge by difficulty
 
 curl -X GET http://localhost:8083/challenge/difficulty/easy
 
-### 2.5. Update challenge
+### 2.6. Update challenge
 
 curl -X PUT http://localhost:8083/challenge/update/1 \
   -H "Content-Type: multipart/form-data" \
@@ -109,7 +109,7 @@ curl -X PUT http://localhost:8083/challenge/update/1 \
   -F "difficulty=Medium" \
   -F "authorid=1235"
 
-### 2.6. Delete challenge
+### 2.7. Delete challenge
 
 curl -X DELETE \
   http://localhost:8083/challenge/delete/1
