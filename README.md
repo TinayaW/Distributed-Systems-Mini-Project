@@ -54,8 +54,6 @@ CodeForge is a dynamic platform designed for coders to tackle coding challenges 
 
 To get started with CodeForge, follow these steps:
 
-1. Clone the repository to your local machine.
-2. Install dependencies for each microservice.
-3. Configure environment variables as needed.
-4. Start the microservices and ensure they are running correctly.
-5. Access the platform via the provided endpoints or API gateway.
+1. Clone the project repository
+2. Update GO mod and Go sum files
+3. Docker compose up backend
