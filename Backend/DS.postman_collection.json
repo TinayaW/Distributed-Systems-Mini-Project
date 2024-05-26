@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "384ae519-e4bb-4c3d-8447-90df0259e290",
+		"_postman_id": "902d4c6f-dd26-4a31-81e3-e561ea54e256",
 		"name": "DS",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "35188635"
+		"_exporter_id": "34981602"
 	},
 	"item": [
 		{
@@ -21,7 +21,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": 2,\r\n    \"username\": \"MrManchi\",\r\n    \"fullname\": \"Manuja\"\r\n}",
+							"raw": "{\r\n    \"id\": 2,\r\n    \"username\": \"MrManchi\",\r\n    \"fullname\": \"Manuja\",\r\n    \"userpassword\" : \"test\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -66,7 +66,7 @@
 				{
 					"name": "Update User",
 					"request": {
-						"method": "POST",
+						"method": "PUT",
 						"header": [
 							{
 								"key": "Content-Type",
@@ -83,7 +83,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8083/user/update/1",
+							"raw": "http://localhost:8083/user/update/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -92,7 +92,7 @@
 							"path": [
 								"user",
 								"update",
-								"1"
+								"2"
 							]
 						}
 					},
@@ -138,6 +138,27 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get User By Username",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/user/username/MrDew",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"user",
+								"username",
+								"MrDew"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -160,17 +181,17 @@
 								{
 									"key": "testcase",
 									"type": "file",
-									"src": []
+									"src": "postman-cloud:///1ef1b532-041e-4680-a01d-d6690efe3f63"
 								},
 								{
 									"key": "template",
 									"type": "file",
-									"src": []
+									"src": "postman-cloud:///1ef1b531-e5b2-4520-bfcc-b38a2ef5dfb2"
 								},
 								{
 									"key": "readme",
 									"type": "file",
-									"src": []
+									"src": "postman-cloud:///1ef1b531-cc7b-43e0-82bf-1ef87febba81"
 								},
 								{
 									"key": "id",
@@ -178,7 +199,7 @@
 									"type": "text"
 								},
 								{
-									"key": "Title",
+									"key": "title",
 									"value": "Example Challenge 1",
 									"type": "text"
 								},
@@ -286,17 +307,17 @@
 								{
 									"key": "testcase",
 									"type": "file",
-									"src": []
+									"src": "postman-cloud:///1ef1b532-041e-4680-a01d-d6690efe3f63"
 								},
 								{
 									"key": "template",
 									"type": "file",
-									"src": []
+									"src": "postman-cloud:///1ef1b531-e5b2-4520-bfcc-b38a2ef5dfb2"
 								},
 								{
 									"key": "readme",
 									"type": "file",
-									"src": []
+									"src": "postman-cloud:///1ef1b531-cc7b-43e0-82bf-1ef87febba81"
 								},
 								{
 									"key": "title",
@@ -373,7 +394,7 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": []
+									"src": "postman-cloud:///1ef1b53a-ad8d-4fb0-ae7e-15c3354547f8"
 								},
 								{
 									"key": "id",
@@ -476,14 +497,6 @@
 								"1"
 							]
 						}
-					},
-					"response": []
-				},
-				{
-					"name": "New Request",
-					"request": {
-						"method": "GET",
-						"header": []
 					},
 					"response": []
 				}
