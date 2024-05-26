@@ -1,6 +1,28 @@
 # Run
 
-1. `docker-compose up --build` 
+1. Open Terminal in root directory
+
+2. `cd api-gateway`
+   `go mod init backend/api-gateway`
+   `go mod tidy`
+   `cd ..`
+
+3. `cd challenge-service`
+   `go mod init backend/challenge-service`
+   `go mod tidy`
+   `cd ..`
+
+4. `cd submission-service`
+   `go mod init backend/submission-service`
+   `go mod tidy`
+   `cd ..`
+
+5. `cd user-service`
+   `go mod init backend/user-service`
+   `go mod tidy`
+   `cd ..`
+
+6. `docker-compose up --build` 
 
 # Test
 
