@@ -14,6 +14,7 @@ type User struct {
 	ID       int    `json:"id"`
 	Username string `json:"username"`
 	Fullname string `json:"fullname"`
+	Password string `json:"userpassword"`
 }
 
 func SetupRouter(consulClient *api.Client, db *sql.DB) *gin.Engine {
@@ -24,6 +25,7 @@ func SetupRouter(consulClient *api.Client, db *sql.DB) *gin.Engine {
 	router.POST("/user/create", createUser(db))
 	router.PUT("/user/update/:id", updateUser(db))
 	router.DELETE("/user/delete/:id", deleteUser(db))
+	router.GET("/user/username/:username", getUserByUsername(db))
 
 	router.GET("/health", func(c *gin.Context) {
 		c.String(http.StatusOK, "OK")
@@ -36,7 +38,7 @@ func getUsers(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Header("Content-Type", "application/json")
 
-		rows, err := db.Query("SELECT id, username, fullname FROM userdata")
+		rows, err := db.Query("SELECT id, username, fullname, userpassword FROM userdata")
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -45,7 +47,7 @@ func getUsers(db *sql.DB) gin.HandlerFunc {
 		var users []User
 		for rows.Next() {
 			var a User
-			err := rows.Scan(&a.ID, &a.Username, &a.Fullname)
+			err := rows.Scan(&a.ID, &a.Username, &a.Fullname, &a.Password)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -65,7 +67,7 @@ func getUserById(db *sql.DB) gin.HandlerFunc {
 		c.Header("Content-Type", "application/json")
 		id := c.Param("id")
 
-		rows, err := db.Query("SELECT id, username, fullname FROM userdata WHERE id = $1", id)
+		rows, err := db.Query("SELECT id, username, fullname, userpassword FROM userdata WHERE id = $1", id)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -73,7 +75,33 @@ func getUserById(db *sql.DB) gin.HandlerFunc {
 
 		var user User
 		if rows.Next() {
-			err := rows.Scan(&user.ID, &user.Username, &user.Fullname)
+			err := rows.Scan(&user.ID, &user.Username, &user.Fullname, &user.Password)
+			if err != nil {
+				log.Fatal(err)
+			}
+		} else {
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "User not found"})
+			return
+		}
+
+		c.IndentedJSON(http.StatusOK, user)
+	}
+}
+
+func getUserByUsername(db *sql.DB) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Header("Content-Type", "application/json")
+		id := c.Param("username")
+
+		rows, err := db.Query("SELECT id, username, fullname, userpassword FROM userdata WHERE username = $1", id)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer rows.Close()
+
+		var user User
+		if rows.Next() {
+			err := rows.Scan(&user.ID, &user.Username, &user.Fullname, &user.Password)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -94,13 +122,13 @@ func createUser(db *sql.DB) gin.HandlerFunc {
 			return
 		}
 
-		stmt, err := db.Prepare("INSERT INTO userdata (id, username, fullname) VALUES ($1, $2, $3)")
+		stmt, err := db.Prepare("INSERT INTO userdata (id, username, fullname, userpassword) VALUES ($1, $2, $3, $4)")
 		if err != nil {
 			log.Fatal(err)
 		}
 		defer stmt.Close()
 
-		if _, err := stmt.Exec(userAlbum.ID, userAlbum.Username, userAlbum.Fullname); err != nil {
+		if _, err := stmt.Exec(userAlbum.ID, userAlbum.Username, userAlbum.Fullname, userAlbum.Password); err != nil {
 			log.Fatal(err)
 		}
 

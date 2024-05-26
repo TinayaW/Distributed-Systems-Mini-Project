@@ -1,10 +1,12 @@
 
+
 CREATE DATABASE userdb;
 
 CREATE TABLE userdata (
 	id SERIAL PRIMARY KEY,
 	username VARCHAR(191) NOT NULL,
-	fullname VARCHAR(191) NOT NULL
+	fullname VARCHAR(191) NOT NULL,
+	userpassword VARCHAR(191) NOT NULL
 );
 
 CREATE DATABASE challengedb;

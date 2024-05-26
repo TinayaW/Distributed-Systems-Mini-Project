@@ -14,7 +14,8 @@ curl -X POST \
   -d '{
     "id": 1,
     "username": "MrManchi",
-    "fullname": "Manuja"
+    "fullname": "Manuja",
+    "userpassword": "test"
   }'
 
 ### 1.2. Get users
@@ -25,7 +26,11 @@ curl -X GET http://localhost:8083/user/users
 
 curl -X GET http://localhost:8083/user/1
 
-### 1.4. Update user
+### 1.4. Get user by username
+
+curl -X GET http://localhost:8083/user/username/MrManchi
+
+### 1.5. Update user
 
 curl -X PUT \
   http://localhost:8083/user/update/1 \
@@ -35,7 +40,7 @@ curl -X PUT \
     "fullname": "Dewmina Kariyawasam"
 }'
 
-### 1.5. Delete user
+### 1.6. Delete user
 
 curl -X DELETE \
   http://localhost:8083/user/delete/1
@@ -58,6 +63,10 @@ curl -X POST \
 ### 2.2. Get challenges
 
 curl -X GET http://localhost:8083/challenge/challenges
+
+### 2.3. Get user challenges
+
+curl -X GET http://localhost:8083/challenge/challenges/user/782077
 
 ### 2.3. Get challenge by ID
 

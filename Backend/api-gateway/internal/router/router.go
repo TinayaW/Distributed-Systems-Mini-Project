@@ -8,12 +8,18 @@ import (
 	"backend/api-gateway/internal/consul"
 	"backend/api-gateway/internal/utils"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/hashicorp/consul/api"
 )
 
 func SetupRouter(consulClient *api.Client) *gin.Engine {
 	router := gin.Default()
+
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"*"}
+	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE"}
+	router.Use(cors.New(config))
 
 	router.NoRoute(func(c *gin.Context) {
 		serviceName, err := utils.GetServiceName(c.Request.URL.Path)
