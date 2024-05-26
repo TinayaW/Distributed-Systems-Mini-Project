@@ -33,6 +33,7 @@ func SetupRouter(consulClient *api.Client, db *sql.DB) *gin.Engine {
 	router.MaxMultipartMemory = 8 << 20
 
 	router.GET("/challenge/challenges", getChallenges(db))
+	router.GET("/challenge/challenges/user/:authorid", getUserChallenges(db))
 	router.GET("/challenge/:id", getChallengeById(db))
 	router.GET("/challenge/difficulty/:difficulty", getChallengesByDifficulty(db))
 	router.POST("/challenge/create", createChallenge(db))
@@ -51,6 +52,35 @@ func getChallenges(db *sql.DB) gin.HandlerFunc {
 		c.Header("Content-Type", "application/json")
 
 		rows, err := db.Query("SELECT id, title, difficulty, authorid FROM challenge")
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer rows.Close()
+
+		var challenges []ChallengeMin
+		for rows.Next() {
+			var a ChallengeMin
+			err := rows.Scan(&a.ID, &a.Title, &a.Difficulty, &a.AuthorID)
+			if err != nil {
+				log.Fatal(err)
+			}
+			challenges = append(challenges, a)
+		}
+		err = rows.Err()
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		c.IndentedJSON(http.StatusOK, challenges)
+	}
+}
+
+func getUserChallenges(db *sql.DB) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Header("Content-Type", "application/json")
+		authorid := c.Param("authorid")
+
+		rows, err := db.Query("SELECT id, title, difficulty, authorid FROM challenge WHERE authorid = $1", authorid)
 		if err != nil {
 			log.Fatal(err)
 		}
