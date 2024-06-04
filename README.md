@@ -16,9 +16,7 @@ CodeForge is a dynamic platform designed for coders to tackle coding challenges 
 
 ## Architecture
 
-<div align='center'>
-    <img src="https://github.com/ManujaDewmina/Problem-Solving-Platform/assets/92631934/a454961b-6801-4762-b9b5-71da617534f6" width="700" align="center">
-</div>
+![Overview](https://github.com/ManujaDewmina/Distributed-Systems-Mini-Project/assets/92631934/21872aa2-1a78-49c0-b58e-d409380c1a73)
 
 ## Usage
 - **Register and log in** to the platform.
@@ -57,3 +55,19 @@ To get started with CodeForge, follow these steps:
 1. Clone the project repository
 2. Update GO mod and Go sum files
 3. Docker compose up backend
+
+## Tech Stack
+
+![Code Forge - Mid Evaluation](https://github.com/ManujaDewmina/Distributed-Systems-Mini-Project/assets/92631934/12415e26-078b-4750-a22d-661123b4fbfb)
+
+## User service component
+
+![Userservice](https://github.com/ManujaDewmina/Distributed-Systems-Mini-Project/assets/92631934/d01b34d3-a4b1-4701-9a75-29f4ff5c4be0)
+
+## Challenge service component
+
+![Challenge Service](https://github.com/ManujaDewmina/Distributed-Systems-Mini-Project/assets/92631934/e2f49d13-c6e9-4e4c-8a2f-795222817596)
+
+## Submission service component
+
+![Submission Service](https://github.com/ManujaDewmina/Distributed-Systems-Mini-Project/assets/92631934/a6c2c251-d053-4162-b696-988b79c1fbc1)
