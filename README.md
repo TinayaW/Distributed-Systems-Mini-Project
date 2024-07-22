@@ -2,11 +2,73 @@
 
 **CodeForge: Crafting Solutions - Building Coders**
 
-## Overview
+# 1. Introduction
+
+## 1.1. Overview
 
 CodeForge is a dynamic platform designed for coders to tackle coding challenges and foster collaboration. Built using microservices architecture, CodeForge provides a range of core services to facilitate learning and skill development.
 
-## Features
+- **Register and log in** to the platform.
+- **Create new challenges** using the Challenge Service.
+- **Submit solutions** and get immediate feedback through the Solution Service.
+- **Explore and participate** in the coding community.
+
+(DISCUSS)
+
+## 1.2. Use cases and Functionalities
+
+1. User Management
+- Register Users: Allows new users to register by providing their details.
+- Authenticate Users: Handles user login and authentication.
+- Manage User Profiles: Enables users to update their profile information and continue coding profile.
+
+2. Challenge Management
+- Create Challenges: Allows users to create new challenges.
+- View Challenges: Provides functionality for users to view available challenges. (View all challenges, View challenges by difficulty, Owned challenges)
+- Update Challenges: Enables modification of existing challenges by the creator.
+
+3. Submission Handling
+- Submit Solutions: Users can submit their solutions to challenges.
+- View Submissions: Provides a way to view submissions for a particular
+challenge.
+- Evaluate Submissions: Facilitates the automatic evaluation of submitted solutions.
+- Score board: Give score board for every challenge and every user seperately.
+
+## 1.3. Overall goal
+
+(Discuss)
+
+## 1.4. Tech Stack
+
+![Code Forge - Mid Evaluation (1)](https://github.com/user-attachments/assets/71302e10-2ed7-41ba-b2d8-a54e05d05825)
+
+# 2. Architecture
+
+## 2.1. Architectural Diagram
+
+### 1. Solution overview architecture
+
+![Architecture](https://github.com/user-attachments/assets/10a548f5-12fa-41b8-a69a-153d8b215cc1)
+
+### 2. User Service
+
+![Userservice](https://github.com/user-attachments/assets/ed1ee0f4-0c7d-4669-b3e0-86141e4ac8f7)
+
+### 3. Challenge Service
+
+![Challenge Service](https://github.com/user-attachments/assets/60a6b585-87a7-486a-b460-31bb6969e49f)
+
+### 4. Submission Service
+
+![Submission Service](https://github.com/user-attachments/assets/3899d4e6-6c14-48a3-b132-4c61e7584110)
+
+## 2.2. Design Decisions
+
+(Discuss)
+
+# 3. Microservices
+
+## 3.1.Services
 
 - **User Management**: Register and authenticate users to access platform features.
 - **Challenge Service**: Create and manage challenges for users to solve.
@@ -14,60 +76,115 @@ CodeForge is a dynamic platform designed for coders to tackle coding challenges 
 - **Discovery Service**: Enable dynamic discovery of microservice instances.
 - **API Gateway**: Serve as a single entry point for client interactions with microservices.
 
-## Architecture
+## 3.2. Implementation Methods
 
-![Overview](https://github.com/ManujaDewmina/Distributed-Systems-Mini-Project/assets/92631934/21872aa2-1a78-49c0-b58e-d409380c1a73)
+(Discuss)
 
-## Usage
-- **Register and log in** to the platform.
-- **Create new challenges** using the Challenge Service.
-- **Submit solutions** and get immediate feedback through the Solution Service.
-- **Explore and participate** in the coding community.
+## 3.3. Core Services
 
-## Functionalities
+### 3.3.1. Functionality
 
-### User Management
+(Discuss)
 
-- **Register Users**: New users can register by providing their details.
-- **Authenticate Users**: Handle user login and authentication.
-- **Manage User Profiles**: Users can update their profile information and continue coding.
+### 3.3.2. REST endpoints
 
-### Challenge Management
+![Code Forge - Mid Evaluation](https://github.com/user-attachments/assets/505cd53f-7095-4a56-a78d-fd92c42dac36)
 
-- **Create Challenges**: Allow users to create new challenges.
-- **View Challenges**: Provide functionality to view available challenges.
-  - View all challenges
-  - View challenges by difficulty
-  - Owned challenges
-- **Update Challenges**: Enable modification of existing challenges by the creator.
+![14](https://github.com/user-attachments/assets/8ef3babc-711b-45a4-aaef-973485ed02bd)
 
-### Submission Handling
+![15](https://github.com/user-attachments/assets/d1c52867-3282-4cbb-a429-b5a048a7e3c4)
 
-- **Submit Solutions**: Users can submit their solutions to challenges.
-- **View Submissions**: Provide a way to view submissions for a particular challenge.
-- **Evaluate Submissions**: Facilitate automatic evaluation of submitted solutions.
-- **Scoreboard**: Display scoreboard for every challenge and user separately.
+### 3.3.3. Inter service Interaction
 
-## Getting Started
+(Discuss)
 
-To get started with CodeForge, follow these steps:
+![Interconnection](https://github.com/user-attachments/assets/c98eba21-e405-4934-815a-cb0ca1de72b7)
 
-1. Clone the project repository
-2. Update GO mod and Go sum files
-3. Docker compose up backend
+## 3.4. Discovery Server - Consul
 
-## Tech Stack
+(Discuss Config)
 
-![Code Forge - Mid Evaluation](https://github.com/ManujaDewmina/Distributed-Systems-Mini-Project/assets/92631934/12415e26-078b-4750-a22d-661123b4fbfb)
+- Service Registration: Microservices register themselves with discovery service, providing necessary metadata and health check information.
 
-## User service component
+- Service Discovery: Services query discovery service to discover other services they need to communicate with, ensuring dynamic and up-to-date connections.
 
-![Userservice](https://github.com/ManujaDewmina/Distributed-Systems-Mini-Project/assets/92631934/d01b34d3-a4b1-4701-9a75-29f4ff5c4be0)
+- Service Health Checks: Regular health checks ensure that only healthy service instances are available for handling requests.
 
-## Challenge service component
+- Automatic Recovery: Automatically re-adds previously unhealthy services to the pool of available services once they become healthy again.
 
-![Challenge Service](https://github.com/ManujaDewmina/Distributed-Systems-Mini-Project/assets/92631934/e2f49d13-c6e9-4e4c-8a2f-795222817596)
+## 3.5. API Gateway
 
-## Submission service component
+(Discuss Config)
 
-![Submission Service](https://github.com/ManujaDewmina/Distributed-Systems-Mini-Project/assets/92631934/a6c2c251-d053-4162-b696-988b79c1fbc1)
+- Single External Endpoint: Acts as the sole entry point for all external client requests, ensuring that microservices endpoints remain internal and secure.
+
+- Routing Requests: Directs incoming client requests to the appropriate microservice based on the URL and other request parameters.
+
+- Service Discovery Integration: Integrates with a service registry to dynamically discover and keep track of available service instances.
+
+- Logging and Monitoring: Provides centralized logging and monitoring of all incoming and outgoing traffic for better observability.
+
+- Request and Response Transformation: Modifies incoming requests and outgoing responses as needed.
+
+# 4. User Interface
+
+## 4.1.Implementation Details
+
+React-Typescript(Discuss)
+
+## 4.2. API Testing Tools
+
+Postman(discuss)
+
+# 5. Deployment
+
+Pre-request instrallations : Docker(v24.0.6), Go(V1.22.0), Node(v18.18.2), PostgreSQl
+Environment : Linux
+
+## 5.1. Frontend
+1. Go to the project directory and run `npm install` to install the necessary dependencies.
+2. Run `npm start` to start the application.
+
+## 5.2. Backend
+
+1. Open Terminal in root directory
+
+2. `cd api-gateway`
+   `go mod init backend/api-gateway`
+   `go mod tidy`
+   `cd ..`
+
+3. `cd challenge-service`
+   `go mod init backend/challenge-service`
+   `go mod tidy`
+   `cd ..`
+
+4. `cd submission-service`
+   `go mod init backend/submission-service`
+   `go mod tidy`
+   `cd ..`
+
+5. `cd user-service`
+   `go mod init backend/user-service`
+   `go mod tidy`
+   `cd ..`
+
+6. `docker-compose up --build`
+
+# 6. Source Code
+
+## 6.1. Github Link
+
+https://github.com/TinayaW/Distributed-Systems-Mini-Project
+
+## 6.2. Development Challenges
+
+(Discuss)
+
+# 7. References
+
+( ADD links)
+1. Go doc
+2. Docker doc
+3. consul doc
+4. React doc
