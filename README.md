@@ -2,11 +2,12 @@
 
 **CodeForge: Crafting Solutions - Building Coders**
 
-## Overview
+# 1. Introduction
+## 1.1. Overview
 
 CodeForge is a dynamic platform designed for coders to tackle coding challenges and foster collaboration. Built using microservices architecture, CodeForge provides a range of core services to facilitate learning and skill development.
 
-## Features
+## 1.2.Features
 
 - **User Management**: Register and authenticate users to access platform features.
 - **Challenge Service**: Create and manage challenges for users to solve.
@@ -14,9 +15,14 @@ CodeForge is a dynamic platform designed for coders to tackle coding challenges 
 - **Discovery Service**: Enable dynamic discovery of microservice instances.
 - **API Gateway**: Serve as a single entry point for client interactions with microservices.
 
-## Architecture
+# 2. Architecture
 
-![Overview](https://github.com/ManujaDewmina/Distributed-Systems-Mini-Project/assets/92631934/21872aa2-1a78-49c0-b58e-d409380c1a73)
+## 2.1. Architectural Diagram
+
+![Architecture](https://github.com/user-attachments/assets/10a548f5-12fa-41b8-a69a-153d8b215cc1)
+
+## 2.2. Design Decisions
+
 
 ## Usage
 - **Register and log in** to the platform.
