@@ -257,7 +257,15 @@ The Challenge Service communicates the Submission Service to request and perform
 
 ## 3.4 Discovery Server - Consul
 
-(Discuss Config)
+### Service Registration and Monitoring with Consul
+
+#### Service Registration
+
+Most of the services have the ability to register themselves with the Consul server when the service starts. During the registration process, the metadata like the service name, the address, the port number, and health check endpoints, are required. This information makes it possible for Consul to have a current register of all the available services.
+
+#### Monitoring
+
+Consul runs health checks periodically for the registered services. Every service has a designated endpoint for health check, such as `/health`, which Consul uses to check for the health of the service in question. The health check can fail when Service B is unavailable and unhealthy, then Consul will exclude it from the list of available services, besides services B will not be discovered by other services and the API Gateway since they are unhealthy and it will Automatically re-adds previously unhealthy services to the pool of available services once they become healthy again
 
 - Service Registration: Microservices register themselves with discovery service, providing necessary metadata and health check information.
 
@@ -269,7 +277,7 @@ The Challenge Service communicates the Submission Service to request and perform
 
 ## 3.5 API Gateway
 
-(Discuss Config)
+The API Gateway dynamically routes client requests to the appropriate service based on URL paths and metadata retrieved from Consul. It employs reverse proxying to properly direct the requests to the concerned service instances while making sure that each request is handled by the right service. API Gateway takes incoming requests and divides them among multiple instances of a given service to increase the efficiency of the system. Consul is used to discover the services available in the system and this integration is done with the API Gateway. It gets the Consul to fetch the addresses of the healthy instances of the services and this informs how the requests are forwarded. This makes certain that the API Gateway always forwards requests to services that are active and responsive in making sure the total system availability.
 
 - Single External Endpoint: Acts as the sole entry point for all external client requests, ensuring that microservices endpoints remain internal and secure.
 
