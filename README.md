@@ -323,7 +323,21 @@ React-Typescript(Discuss)
 
 ## 4.2 API Testing Tools
 
-Postman(discuss)
+Postman is used here and it is a tool that is widely used and utilized in API testing that makes the implementation of API testing rather easy and manageable. It is a convenient tool to send the HTTP requests and study the response as it is widely used by developers and testers. 
+
+For this particular project, there was the development of a Postman collection to contain the different API requests of the services under development. The collection consisted of such requests – User Service, Challenge Service, and Submission Service. Every request in the collection was created to target the certain endpoints and the possibilities that are connected with them.
+
+### Testing Workflow
+
+1. Setting Up Requests - All endpoints of the services were tested by creating a request in postman corresponding to its end points. For instance, the User Service contained the requests to create, get, modify, or remove users. The requests were assigned with correct HTTP verbs (GET, POST, PUT, DELETE) and headers and mostly the Content-Type header that defines the type of data that is being transferred.
+2. Organizing Tests - The requests were grouped in to folders bearing the nature of the services they contained so as to be easily managed and methodologically ran through tests. This organization assisted in categorizing similar requests and executing them in a serial manner to evaluate different automations.
+3. Running Collections - Collection runner in postman permitted the running of the whole collection, as well as individual folders within the collection. This feature allows for each endpoint to be tested as a group and it was also autographed to guarantee that changing one section of the API would not impact the other sections. The collection runner also supplied me with comprehensive reports of the test runs of the failed requests and the cause of the failures which we had to address in order to fix the API.
+
+### Benefits of Using Postman
+   - Reduced the amount of time it takes to perform testing by making the sending of requests and analysis of responses easier.
+   - The collection could be made available to all members of a particular team so that the way various tests are conducted remains standardized, and people can work together.
+
+In general, Postman was an essential help in the phases of API development, because using these tools, it is possible to make sure that the APIs are stable, effective and created with desired functionality before all APIs would be put into production.
 
 # 5 Deployment
 
