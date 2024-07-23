@@ -6,14 +6,12 @@
 
 ## 1.1. Overview
 
-CodeForge is a dynamic platform designed for coders to tackle coding challenges and foster collaboration. Built using microservices architecture, CodeForge provides a range of core services to facilitate learning and skill development.
+CodeForge is a dynamic platform designed for coders to tackle coding challenges and collaboration with other members of the community. CodeForge, designed with a microservices architecture, provides an array of services that aims at enhancing the learning process, developing necessary skills, and encouraging active community presence. The idea of the platform is to help corders at various skill levels to code more effectively and in doing so, they are provided with real time responses and a rich set of features to track and improve their coding abilities.
 
 - **Register and log in** to the platform.
 - **Create new challenges** using the Challenge Service.
 - **Submit solutions** and get immediate feedback through the Solution Service.
 - **Explore and participate** in the coding community.
-
-(DISCUSS)
 
 ## 1.2. Use cases and Functionalities
 
@@ -36,7 +34,7 @@ challenge.
 
 ## 1.3. Overall goal
 
-(Discuss)
+The overall goal of CodeForge is to build a friendly, vibrant, and instructional learning community where programmers can develop their abilities continuously. Thus, CodeForge’s goals are aligned with its users’ interests – to provide a vast number of coding challenges that include live feedback and collaboration, allowing users to enhance their problem-solving skills and learn new algorithms and techniques in order be more efficient programmers. The layout of the codeforge platform is built to encourage users to promotes knowledge sharing as well as competition in the challenges. Thus, being an all-in-one solution, CodeForge has the potential to become the ultimate guide and the popular platform for the majority of coders aspiring to develop their coding abilities and connect with like-minded people.
 
 ## 1.4. Tech Stack
 
@@ -183,8 +181,8 @@ https://github.com/TinayaW/Distributed-Systems-Mini-Project
 
 # 7. References
 
-( ADD links)
-1. Go doc
-2. Docker doc
-3. consul doc
-4. React doc
+1. Go documentation - https://go.dev/doc/
+2. Docker documentation - https://docs.docker.com/
+3. consul documentation - https://developer.hashicorp.com/consul/docs
+4. React documentation - https://react.dev/learn   ,   https://react.dev/blog/2023/03/16/introducing-react-dev
+
