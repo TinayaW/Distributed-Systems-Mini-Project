@@ -62,29 +62,77 @@ The overall goal of CodeForge is to build a friendly, vibrant, and instructional
 
 ## 2.2. Design Decisions
 
-(Discuss)
+The decision to split the application into multiple microservices is driven by several key factors as follows.
+
+**Modularity -** Due to the division of the application into several services with defined roles, modularity is attained. This clean division of responsibilities enables anyone working on either part of the application to solve, build, or understand either part without worrying about the other.
+
+**Scalability -** Microservices can be scaled individually of one another. The architecture allows for adding more capacity to a specific service if the load, for example, in the Submission Service, is very high while the other services will be unaffected.
+
+**Fault Isolation -** In monolithic architecture, a problem affecting one part of the application has the potential to result in the collapse of the entire system. Thus, by relying on microservices, we effectively limit failures of services, which increases the general reliability of the system.
+
+**Technology Diversity -** It is possible that one service may use the best of one set of technologies while the other service may use the best of another set of technologies. It assists the teams to be flexible and optimize each service without the interference of the others.
+
+**Continuous Deployment -** Microservices make it easier to deploy more often and more rapidly. Thus, since all services are independent, incorporating changes and bug-fixes can be done for one service only, without involving all other services of the application.
+
+### 2.2.1 Contributions of Each Service to Overall Functionality
+
+1. User Service
+
+Oversees functions concerning the user, including creating, searching, modifying, or destroying the user. Serves as the authority for users' actual data and guarantees the proper storing and usage of the user data to be provided for other services' usage. It exposes contracts for basic operations on user data, namely CRUD, which is always needed to manage users in an application.
+
+2. Challenge Service
+
+Responsible for all the operations concerning challenges, including creating new ones, getting details of the challenges, editing, and even deleting the challenges. Thus, the application developed based on managing challenges is in the focus of the described work’s key functionality. It comprehensively secretes challenge data, thereby enabling the user to engage in the particular challenge as well as submitting the solutions. It also ensures that issues of challenge are well instantiated and ready for user exploits.
+
+3. Submission Service
+
+Handles the submissions for the challenges and it has functions to upload new submissions and to search the submissions by the user or by the challenge. Additionally, it has functions to view the submission details. Delivers all the features that are needed by users for submitting their solutions to the challenges as well as by administrators for viewing and moderating these submissions. This service is crucial to the implementation of the application’s objective of creating an environment where users can participate and respond to challenges.
+
+### 2.2.2 Detailed Explanation of Design Decisions
+
+1. User Service Design
+- **Reasoning -** User management is a core process that cuts across the chains of the application. To separate them out into their own service means that the user-related operations are compartmentalized and can be further scaled if necessary.
+- **Impact -** Provides higher security and better administration for user data, ordering all the data in a singular, specific service for the application and providing uniformity for the user data within the program.
+
+2. Challenge Service Design
+- **Reasoning -** Challenges are the main asset of the users as they involve real-life contents. This way, challenge management can be developed as its own unique service that we can fine-tune and scale the challenge-related operations separately.
+- **Impact -** Enhances how challenge-related procedures are managed with specific regard made to challenge data as well as challenge logic, making challenges easier to maintain as well as scale.
+
+3. Submission Service Design
+- **Reasoning -** Submissions are the outcomes of challenges, which is a crucial aspect of the user’s engagement with the application. Processing submissions as a different service helps to organize data storing, processing, and submissions separately.
+- **Impact -** Submission handling gets improved, offering users reliability when it comes to submission as well as the retrieval of challenge responses.
+
+### 2.2.3 Overall Impact on Functionality
+
+Each service contributes to the overall functionality by focusing on a specific aspect of the application.
+
+- **User Service -** Provides maximum security checks in the handling of users’ information, which forms the basis of all relations in the application.
+- **Challenge Service -** Handles the hosting of the game’s content and operations that allow the creation and management of challenges that the users can solve.
+- **Submission Service -** Enables user contribution as the application allows users to post their solutions to the challenges posed by an organization, which is the main engagement aspect of the application.
+
+By employing three distinct services, we achieve a well-organized, scalable, and maintainable architecture which supports the application's goals while ensuring a smooth user experience.
 
 # 3. Microservices
 
-## 3.1.Services
+## 3.1 Services
 
-- **User Management**: Register and authenticate users to access platform features.
-- **Challenge Service**: Create and manage challenges for users to solve.
-- **Submission Service**: Submit code solutions, evaluated against predefined test cases, and receive scores.
-- **Discovery Service**: Enable dynamic discovery of microservice instances.
-- **API Gateway**: Serve as a single entry point for client interactions with microservices.
+- **User Management** - Register and authenticate users to access platform features.
+- **Challenge Service** - Create and manage challenges for users to solve.
+- **Submission Service** - Submit code solutions, evaluated against predefined test cases, and receive scores.
+- **Discovery Service** - Enable dynamic discovery of microservice instances.
+- **API Gateway** - Serve as a single entry point for client interactions with microservices.
 
-## 3.2. Implementation Methods
-
-(Discuss)
-
-## 3.3. Core Services
-
-### 3.3.1. Functionality
+## 3.2 Implementation Methods
 
 (Discuss)
 
-### 3.3.2. REST endpoints
+## 3.3 Core Services
+
+### 3.3.1 Functionality
+
+(Discuss)
+
+### 3.3.2 REST endpoints
 
 ![Code Forge - Mid Evaluation](https://github.com/user-attachments/assets/505cd53f-7095-4a56-a78d-fd92c42dac36)
 
@@ -92,13 +140,13 @@ The overall goal of CodeForge is to build a friendly, vibrant, and instructional
 
 ![15](https://github.com/user-attachments/assets/d1c52867-3282-4cbb-a429-b5a048a7e3c4)
 
-### 3.3.3. Inter service Interaction
+### 3.3.3 Inter service Interaction
 
 (Discuss)
 
 ![Interconnection](https://github.com/user-attachments/assets/c98eba21-e405-4934-815a-cb0ca1de72b7)
 
-## 3.4. Discovery Server - Consul
+## 3.4 Discovery Server - Consul
 
 (Discuss Config)
 
@@ -110,7 +158,7 @@ The overall goal of CodeForge is to build a friendly, vibrant, and instructional
 
 - Automatic Recovery: Automatically re-adds previously unhealthy services to the pool of available services once they become healthy again.
 
-## 3.5. API Gateway
+## 3.5 API Gateway
 
 (Discuss Config)
 
@@ -124,26 +172,26 @@ The overall goal of CodeForge is to build a friendly, vibrant, and instructional
 
 - Request and Response Transformation: Modifies incoming requests and outgoing responses as needed.
 
-# 4. User Interface
+# 4 User Interface
 
-## 4.1.Implementation Details
+## 4.1 Implementation Details
 
 React-Typescript(Discuss)
 
-## 4.2. API Testing Tools
+## 4.2 API Testing Tools
 
 Postman(discuss)
 
-# 5. Deployment
+# 5 Deployment
 
 Pre-request instrallations : Docker(v24.0.6), Go(V1.22.0), Node(v18.18.2), PostgreSQl
 Environment : Linux
 
-## 5.1. Frontend
+## 5.1 Frontend
 1. Go to the project directory and run `npm install` to install the necessary dependencies.
 2. Run `npm start` to start the application.
 
-## 5.2. Backend
+## 5.2 Backend
 
 1. Open Terminal in root directory
 
@@ -169,17 +217,17 @@ Environment : Linux
 
 6. `docker-compose up --build`
 
-# 6. Source Code
+# 6 Source Code
 
-## 6.1. Github Link
+## 6.1 Github Link
 
 https://github.com/TinayaW/Distributed-Systems-Mini-Project
 
-## 6.2. Development Challenges
+## 6.2 Development Challenges
 
 (Discuss)
 
-# 7. References
+# 7 References
 
 1. Go documentation - https://go.dev/doc/
 2. Docker documentation - https://docs.docker.com/
