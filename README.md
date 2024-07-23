@@ -236,7 +236,7 @@ The Submission Service manages all operations related to submissions, including 
    - **Description:** Retrieves all submissions for a specific challenge.
 
    ###### Get Submission by ID
-   - **URL:** `http://localhost:8083/submission/{id}`
+   - **URL:** `http://localhost:8083/submission/{submissionid}`
    - **Method:** `GET`
    - **Description:** Retrieves detailed information for a specific submission by ID.
 
