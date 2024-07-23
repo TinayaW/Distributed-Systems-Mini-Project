@@ -130,7 +130,116 @@ By employing three distinct services, we achieve a well-organized, scalable, and
 
 ### 3.3.1 Functionality
 
-(Discuss)
+#### User Service 
+
+##### Functionality
+This service is organized to give overall charge of all operations affecting a user account or information whether it entails Creating New User Account, Retrieval, Updation or Deletion of User Account. It becomes the place where all the user related data is held and managed within the context of the application.
+
+##### REST API Endpoints
+
+###### Create User
+- **URL:** `http://localhost:8083/user/create`
+- **Method:** `POST`
+- **Content-Type:** `application/json`
+- **Description:** Creates a new user in the system.
+
+###### Get Users
+- **URL:** `http://localhost:8083/user/users`
+- **Method:** `GET`
+- **Description:** Retrieves a list of all users.
+
+###### Get User by ID
+- **URL:** `http://localhost:8083/user/{userid}`
+- **Method:** `GET`
+- **Description:** Retrieves detailed information for a specific user by ID.
+
+###### Get User by name
+- **URL:** `http://localhost:8083/user/usernamae{usernamae}`
+- **Method:** `GET`
+- **Description:** Retrieves detailed information for a specific user by usernamae.
+
+###### Update User
+- **URL:** `http://localhost:8083/user/update/{userid}`
+- **Method:** `PUT`
+- **Content-Type:** `application/json`
+- **Description:** Updates the information of a specific user by ID.
+
+###### Delete User
+- **URL:** `http://localhost:8083/user/delete/{userid}`
+- **Method:** `DELETE`
+- **Description:**  Deletes a specific user by ID.
+
+
+#### Challenge Service 
+
+##### Functionality
+The Challenge Service manages all operations related to challenges, including creation, retrieval, updating, and deletion of challenges. It is central to the application’s core functionality, facilitating the management and participation in challenges.
+
+##### REST API Endpoints
+
+   ###### Create Challenge
+   - **URL:** `http://localhost:8083/challenge/create`
+   - **Method:** `POST`
+   - **Description:** Creates a new challenge in the system.
+
+   ###### Get Challenges
+   - **URL:** `http://localhost:8083/challenge/challenges`
+   - **Method:** `GET`
+   - **Description:** Retrieves a list of all challenges.
+
+   ###### Get Challenge by ID
+   - **URL:** `http://localhost:8083/challenge/{challengeid}`
+   - **Method:** `GET`
+   - **Description:** Retrieves detailed information for a specific challenge by ID.
+
+   ###### Get Challenge by Author ID
+   - **URL:** `http://localhost:8083/challenge/challenges/user{userid}`
+   - **Method:** `GET`
+   - **Description:** Retrieves detailed information for a specific challenge by Author ID.
+
+   ###### Get Challenge by Difficulty
+   - **URL:** `http://localhost:8083/challenge/difficulty{difficulty}`
+   - **Method:** `GET`
+   - **Description:** Retrieves detailed information for a specific challenge by Difficulty.
+
+   ###### Update Challenge
+   - **URL:** `http://localhost:8083/challenge/update/{challengeid}`
+   - **Method:** `PUT`
+   - **Description:** Updates the information of a specific challenge by ID.
+
+   ###### Delete Challenge
+   - **URL:** `http://localhost:8083/challenge/delete/{challengeid}`
+   - **Method:** `DELETE`
+   - **Description:** Deletes a specific challenge by ID.
+
+
+#### Submission Service 
+
+##### Functionality
+The Submission Service manages all operations related to submissions, including uploading new submissions, retrieving submissions, and viewing submission details. It handles user responses to challenges.
+
+##### REST API Endpoints
+
+   ###### Upload Submission
+   - **URL:** `http://localhost:8083/submission/upload`
+   - **Method:** `POST`
+   - **Description:** Uploads a new submission for a challenge.
+
+   ###### Get Submissions by User ID
+   - **URL:** `http://localhost:8083/submission/user/{userId}`
+   - **Method:** `GET`
+   - **Description:** Retrieves all submissions made by a specific user.
+
+   ###### Get Submissions by Challenge ID
+   - **URL:** `http://localhost:8083/submission/challenge/{challengeId}`
+   - **Method:** `GET`
+   - **Description:** Retrieves all submissions for a specific challenge.
+
+   ###### Get Submission by ID
+   - **URL:** `http://localhost:8083/submission/{id}`
+   - **Method:** `GET`
+   - **Description:** Retrieves detailed information for a specific submission by ID.
+
 
 ### 3.3.2 REST endpoints
 
@@ -142,7 +251,7 @@ By employing three distinct services, we achieve a well-organized, scalable, and
 
 ### 3.3.3 Inter service Interaction
 
-(Discuss)
+The Challenge Service communicates the Submission Service to request and perform operations on submissions concerning certain challenges. That way, the Submission Service communicates communicates with the Challenge Service to obtain data related to the challenges for every submission. This helps in guaranteeing that the submissions are well associated with the appropriate users and challenges.
 
 ![Interconnection](https://github.com/user-attachments/assets/c98eba21-e405-4934-815a-cb0ca1de72b7)
 
