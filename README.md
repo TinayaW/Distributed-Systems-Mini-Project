@@ -124,7 +124,33 @@ By employing three distinct services, we achieve a well-organized, scalable, and
 
 ## 3.2 Implementation Methods
 
-(Discuss)
+### Netflix Software Stack
+
+While this project decided to use Go as the backend language and Consul as the service discovery tool, there are several of the Netflix software stack’s ideas and instruments that defined the architecture and the approach to implementation. The Netflix stack provides tools that help in creating fault-tolerant, highly available, and easy-to-manage microservices such as service discovery, load balancing, and routing done at the gateway level.
+
+### Implementation with Go and Consul
+
+#### Service Discovery with Consul
+
+Consul is used for the discovery of services and the checking of the health of the services. Every service in the model runs a registration with pull data to Consul; data include service name, address, port, and the health checks’ port. Consul monitors these services and enables other services to— discovering the health state and communicating with the healthy instances.
+
+- **Service Registration** - What happens is that when some service begins, it intends to join a particular Consul server. This registration includes relevant information that any service provider should provide such as the name of the service, and the place where the service can be accessed from.
+
+- **Health Checks** - Usually, Consul takes a special check up on the registered services to know if they are healthy and running okay. If a service does not pass a health check, the service is then rejected from the pool of running services.
+
+#### API Gateway with Go and Consul
+
+The API Gateway acts as a reverse proxy, that is as the entry point into the application since it reverses the client requests and forwards them to the corresponding microservices. It communicates with the consul to get real time information of the available service instance to forward call accordingly.
+
+- **Dynamic Routing** -The gateway utilizes the information from the Consul to actively write client requests to working instances of a service. This means that requests are always made to healthy services only.
+- **Load Balancing** -  Load balancing is achieved through the fact that the gateway will forward requests coming in for a certain service to multiple instances of the service for efficiency.
+
+### Core Services in Go
+
+All the services (User Service, Challenge Service, Submission Service) are written in Go and adhere to REST conventions. Each service defines multiple APIs and communicates with other services using HTTP calls.
+
+### Summary
+As to the implementation, it has been done with Go and Consul, which replicates the Netflix software stack’s principles, including service discovery, dynamic routing, and load balancing. Such an approach guarantees the anti-frail, scalable and maintainable structure of microservices.
 
 ## 3.3 Core Services
 
