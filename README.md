@@ -319,7 +319,8 @@ The API Gateway dynamically routes client requests to the appropriate service ba
 
 ## 4.1 Implementation Details
 
-React-Typescript(Discuss)
+- Framework : React
+- Language : Typescript
 
 ## 4.2 API Testing Tools
 
@@ -382,7 +383,13 @@ https://github.com/TinayaW/Distributed-Systems-Mini-Project
 
 ## 6.2 Development Challenges
 
-(Discuss)
+1. Service Communication and Coordination: Ensuring efficient and reliable communication between microservices, especially in a distributed environment where network latency, partial failures, and message serialization/deserialization can occur.
+
+2. Service Discovery and Load Balancing: Managing dynamic service discovery and load balancing in a microservices architecture to ensure that services can find and communicate with each other efficiently.
+
+3. Database Schema Management: Handling database schema changes and migrations in a microservices environment where multiple services might be interacting with the same PostgreSQL database.
+
+4. Data Consistency and Transactions: Maintaining data consistency across microservices, especially when dealing with distributed transactions and ensuring ACID properties in the system.
 
 # 7 References
 
